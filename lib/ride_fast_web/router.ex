@@ -7,6 +7,8 @@ defmodule RideFastWeb.Router do
 
   scope "/api", RideFastWeb do
     pipe_through :api
+
+    resources "/drivers", DriverController
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
