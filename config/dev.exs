@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :ride_fast, RideFast.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "ride_user",
+  password: "",
   hostname: "localhost",
   database: "ride_fast_dev",
   stacktrace: true,
