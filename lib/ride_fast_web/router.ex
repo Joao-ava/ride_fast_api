@@ -25,6 +25,7 @@ defmodule RideFastWeb.Router do
       post "/profile", DriverProfileController, :create
       get "/profile", DriverProfileController, :show
       put "/profile", DriverProfileController, :update
+      resources "/languages", DriverLanguageController
     end
 
     resources "/vehicles", VehiclesController, except: [:index, :create]

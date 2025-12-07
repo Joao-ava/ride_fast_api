@@ -12,7 +12,7 @@ defmodule RideFastWeb.LanguageJSON do
   Renders a single language.
   """
   def show(%{language: language}) do
-    %{data: data(language)}
+    data(language)
   end
 
   defp data(%Language{} = language) do

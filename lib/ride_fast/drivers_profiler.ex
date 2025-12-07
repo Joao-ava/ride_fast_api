@@ -111,28 +111,6 @@ defmodule RideFast.DriversProfiler do
   end
 
   @doc """
-  Deletes a driver_Profile.
-
-  ## Examples
-
-      iex> delete_driver_Profile(scope, driver_Profile)
-      {:ok, %DriverProfile{}}
-
-      iex> delete_driver_Profile(scope, driver_Profile)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_driver_profile(%Scope{} = scope, %DriverProfile{} = driver_Profile) do
-    true = driver_Profile.user_id == scope.account.id
-
-    with {:ok, driver_Profile = %DriverProfile{}} <-
-           Repo.delete(driver_Profile) do
-      broadcast_driver_profile(scope, {:deleted, driver_Profile})
-      {:ok, driver_Profile}
-    end
-  end
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for tracking driver_Profile changes.
 
   ## Examples
@@ -142,6 +120,6 @@ defmodule RideFast.DriversProfiler do
 
   """
   def change_driver_profile(%Scope{} = scope, %DriverProfile{} = driver_Profile, attrs \\ %{}) do
-    DriverProfile.changeset(driver_Profile, attrs, scope)
+    DriverProfile.changeset(driver_Profile, attrs)
   end
 end

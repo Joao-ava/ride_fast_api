@@ -13,7 +13,7 @@ defmodule RideFastWeb.LanguageController do
   end
 
   # POST /api/languages
-  def create(conn, %{"language" => language_params}) do
+  def create(conn, language_params) do
     with {:ok, %Language{} = language} <- Languages.create_language(language_params) do
       conn
       |> put_status(:created)
