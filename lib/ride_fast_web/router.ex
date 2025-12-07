@@ -11,6 +11,7 @@ defmodule RideFastWeb.Router do
     pipe_through :api
 
     post "/auth/register", AccountController, :register
+    post "/auth/login", AccountController, :login
 
     resources "/drivers", DriverController
   end

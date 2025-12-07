@@ -15,7 +15,7 @@ defmodule RideFast.Repo.Migrations.CreateUsersAuthTables do
     create unique_index(:users, [:email])
 
     create table(:users_tokens) do
-      add :token, :binary, null: false, size: 32
+      add :token, :string, size: 512, null: false
       add :context, :string, null: false
       add :sent_to, :string
       add :authenticated_at, :utc_datetime

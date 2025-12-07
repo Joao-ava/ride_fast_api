@@ -53,7 +53,8 @@ defmodule RideFast.MixProject do
       {:dns_cluster, "~> 0.2.0"},
       {:phoenix_html, "~> 4.1"},
       {:pbkdf2_elixir, "~> 2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:guardian, "~> 2.3"}
     ]
   end
 

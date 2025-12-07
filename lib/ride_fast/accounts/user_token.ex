@@ -62,32 +62,14 @@ defmodule RideFast.Accounts.UserToken do
     {:ok, query}
   end
 
-  @doc """
-  Builds a token and its hash to be delivered to the user's email.
+  def build_api_token(role, user, context) do
+    {:ok, token, _claims} = RideFast.Guardian.encode_and_sign(%{role: role, id: user.id})
 
-  The non-hashed token is sent to the user email while the
-  hashed part is stored in the database. The original token cannot be reconstructed,
-  which means anyone with read-only access to the database cannot directly use
-  the token in the application to gain access. Furthermore, if the user changes
-  their email in the system, the tokens sent to the previous email are no longer
-  valid.
-
-  Users can easily adapt the existing code to provide other types of delivery methods,
-  for example, by phone numbers.
-  """
-  def build_email_token(user, context) do
-    build_hashed_token(user, context, user.email)
-  end
-
-  defp build_hashed_token(_user, context, sent_to) do
-    token = :crypto.strong_rand_bytes(@rand_size)
-    hashed_token = :crypto.hash(@hash_algorithm, token)
-
-    {Base.url_encode64(token, padding: false),
+    {token,
      %UserToken{
-       token: hashed_token,
+       token: token,
        context: context,
-       sent_to: sent_to
+       sent_to: user.email
      }}
   end
 

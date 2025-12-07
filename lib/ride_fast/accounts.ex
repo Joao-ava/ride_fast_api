@@ -45,6 +45,22 @@ defmodule RideFast.Accounts do
     if User.valid_password?(user, password), do: user
   end
 
+  def get_driver_by_email_and_password(email, password)
+      when is_binary(email) and is_binary(password) do
+    driver = Repo.get_by(Driver, email: email)
+    if Driver.valid_password?(driver, password), do: driver
+  end
+
+  def get_by_email_and_password(email, password) do
+    user = get_user_by_email_and_password(email, password)
+    driver = get_driver_by_email_and_password(email, password)
+    cond do
+      user -> {:ok, user, create_user_api_token("user", user)}
+      driver -> {:ok, driver, create_user_api_token("driver", driver)}
+      true -> {:error, "E-mail or password is incorrect"}
+    end
+  end
+
   @doc """
   Gets a single user.
 
@@ -60,6 +76,14 @@ defmodule RideFast.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  def get_account(role, id) do
+    case role do
+      "user" -> Repo.get!(User, id)
+      "driver" -> Repo.get!(Driver, id)
+      _ -> {:error, :not_found}
+    end
+  end
 
   def register(attrs) do
     case attrs["role"] do
@@ -228,5 +252,17 @@ defmodule RideFast.Accounts do
         {:ok, {user, tokens_to_expire}}
       end
     end)
+  end
+
+  @doc """
+  Creates a new api token for a user.
+
+  The token returned must be saved somewhere safe.
+  This token cannot be recovered from the database.
+  """
+  def create_user_api_token(role, user) do
+    {encoded_token, user_token} = UserToken.build_api_token(role, user, "api-token")
+    Repo.insert!(user_token)
+    encoded_token
   end
 end
