@@ -18,7 +18,16 @@ defmodule RideFastWeb.Router do
   scope "/api", RideFastWeb do
     pipe_through [:api, :fetch_current_scope_for_api_user]
 
+    # Drivers
     resources "/drivers", DriverController
+
+    # Languages
+    resources "/languages", LanguageController
+
+    # # Drivers <-> Languages (N:N)
+    # get    "/drivers/:driver_id/languages", DriverLanguageController, :index
+    # post   "/drivers/:driver_id/languages/:language_id", DriverLanguageController, :add
+    # delete "/drivers/:driver_id/languages/:language_id", DriverLanguageController, :remove
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
