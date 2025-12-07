@@ -22,6 +22,9 @@ defmodule RideFastWeb.Router do
     resources "/drivers", DriverController do
       resources "/vehicles", VehiclesController, only: [:index, :create]
       get "/ratings", RatingsController, :index
+      post "/profile", DriverProfileController, :create
+      get "/profile", DriverProfileController, :show
+      put "/profile", DriverProfileController, :update
     end
 
     resources "/vehicles", VehiclesController, except: [:index, :create]
