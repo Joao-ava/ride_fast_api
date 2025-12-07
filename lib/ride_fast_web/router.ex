@@ -19,7 +19,11 @@ defmodule RideFastWeb.Router do
     pipe_through [:api, :fetch_current_scope_for_api_user]
 
     # Drivers
-    resources "/drivers", DriverController
+    resources "/drivers", DriverController do
+      resources "/vehicles", VehiclesController, only: [:index, :create]
+    end
+
+    resources "/vehicles", VehiclesController, except: [:index, :create]
 
     # Languages
     resources "/languages", LanguageController

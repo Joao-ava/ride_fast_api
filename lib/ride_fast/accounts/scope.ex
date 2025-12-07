@@ -19,7 +19,7 @@ defmodule RideFast.Accounts.Scope do
   alias RideFast.Accounts.User
   alias RideFast.Drivers.Driver
 
-  defstruct user: nil, role: nil
+  defstruct account: nil, role: nil
 
   @doc """
   Creates a scope for the given user.
@@ -27,11 +27,11 @@ defmodule RideFast.Accounts.Scope do
   Returns nil if no user is given.
   """
   def for_user(%User{} = user) do
-    %__MODULE__{user: user, role: :user}
+    %__MODULE__{account: user, role: :user}
   end
 
   def for_user(%Driver{} = user) do
-    %__MODULE__{user: user, role: :driver}
+    %__MODULE__{account: user, role: :driver}
   end
 
   def for_user(nil), do: nil
