@@ -1,7 +1,7 @@
 defmodule RideFastWeb.Router do
   use RideFastWeb, :router
 
-  # import RideFastWeb.UserAuth
+  import RideFastWeb.UserAuth
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -12,6 +12,11 @@ defmodule RideFastWeb.Router do
 
     post "/auth/register", AccountController, :register
     post "/auth/login", AccountController, :login
+  end
+
+  # rotas com autenticação
+  scope "/api", RideFastWeb do
+    pipe_through [:api, :fetch_current_scope_for_api_user]
 
     resources "/drivers", DriverController
   end

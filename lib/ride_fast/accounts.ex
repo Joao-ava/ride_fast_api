@@ -265,4 +265,18 @@ defmodule RideFast.Accounts do
     Repo.insert!(user_token)
     encoded_token
   end
+
+  @doc """
+  Fetches the user by API token.
+  """
+  def fetch_user_by_api_token(token) do
+    IO.puts("token = #{token}")
+    with %UserToken{} = user_token <- Repo.get_by(UserToken, token: token),
+      {:ok, role, id} = UserToken.get_data(user_token) do
+        {:ok, get_account(role, id)}
+    else
+      nil -> {:error, :invalid_token}   # quando Repo.get_by não encontra nada
+      {:error, reason} -> {:error, reason}
+    end
+  end
 end

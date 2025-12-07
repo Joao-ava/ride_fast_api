@@ -103,4 +103,13 @@ defmodule RideFast.Accounts.UserToken do
   defp by_token_and_context_query(token, context) do
     from UserToken, where: [token: ^token, context: ^context]
   end
+
+  def get_data(user_token) do
+    case RideFast.Guardian.decode_and_verify(user_token.token) do
+      {:ok, data} ->
+        [role, id] = String.split(data["sub"], "_")
+        {:ok, role, id}
+      {:error, reason} -> {:error, reason}
+    end
+  end
 end
