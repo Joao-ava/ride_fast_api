@@ -1,6 +1,7 @@
 defmodule RideFast.Drivers.Driver do
   use Ecto.Schema
   import Ecto.Changeset
+  
 
   schema "drivers" do
     field :name, :string

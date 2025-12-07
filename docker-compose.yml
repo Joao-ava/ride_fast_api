@@ -4,10 +4,10 @@ services:
     container_name: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD:           # senha do root
+      MYSQL_ROOT_PASSWORD:            # senha do root
       MYSQL_DATABASE: ride_fast              # nome do banco de dados
       MYSQL_USER: ride_user                  # usuário do banco de dados
-      MYSQL_PASSWORD:                  # senha do usuário do banco de dados
+      MYSQL_PASSWORD:                   # senha do usuário do banco de dados
     ports:
       - "3306:3306"                          # mapeamento da porta do MySQL
     volumes:
