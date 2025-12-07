@@ -21,6 +21,7 @@ defmodule RideFastWeb.Router do
     # Drivers
     resources "/drivers", DriverController do
       resources "/vehicles", VehiclesController, only: [:index, :create]
+      get "/ratings", RatingsController, :index
     end
 
     resources "/vehicles", VehiclesController, except: [:index, :create]
@@ -30,6 +31,7 @@ defmodule RideFastWeb.Router do
       post "/complete", RidesController, :complete
       get "/history", RidesController, :index_histories
       post "/cancel", RidesController, :delete
+      post "/ratings", RatingsController, :create
     end
 
     # Languages
