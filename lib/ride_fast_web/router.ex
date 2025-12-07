@@ -1,12 +1,16 @@
 defmodule RideFastWeb.Router do
   use RideFastWeb, :router
 
+  # import RideFastWeb.UserAuth
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/api", RideFastWeb do
     pipe_through :api
+
+    post "/auth/register", AccountController, :register
 
     resources "/drivers", DriverController
   end
@@ -27,4 +31,30 @@ defmodule RideFastWeb.Router do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
+
+  ## Authentication routes
+
+  # scope "/", RideFastWeb do
+  #   pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+  #   get "/users/register", UserRegistrationController, :new
+  #   post "/users/register", UserRegistrationController, :create
+  # end
+
+  # scope "/", RideFastWeb do
+  #   pipe_through [:browser, :require_authenticated_user]
+
+  #   get "/users/settings", UserSettingsController, :edit
+  #   put "/users/settings", UserSettingsController, :update
+  #   get "/users/settings/confirm-email/:token", UserSettingsController, :confirm_email
+  # end
+
+  # scope "/", RideFastWeb do
+  #   pipe_through [:browser]
+
+  #   get "/users/log-in", UserSessionController, :new
+  #   get "/users/log-in/:token", UserSessionController, :confirm
+  #   post "/users/log-in", UserSessionController, :create
+  #   delete "/users/log-out", UserSessionController, :delete
+  # end
 end

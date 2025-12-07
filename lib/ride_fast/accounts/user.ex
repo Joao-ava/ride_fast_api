@@ -1,25 +1,30 @@
-defmodule RideFast.Drivers.Driver do
+defmodule RideFast.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "drivers" do
+  schema "users" do
     field :name, :string
     field :email, :string
     field :phone, :string
     field :password, :string, virtual: true, redact: true
-    field :password_hash, :string
-    field :status, :string
+    field :password_hash, :string, redact: true
+    field :confirmed_at, :utc_datetime
+    field :authenticated_at, :utc_datetime, virtual: true
 
     timestamps(type: :utc_datetime)
   end
 
-  @doc false
-  def changeset(driver, attrs) do
-    driver
-    |> cast(attrs, [:name, :email, :phone, :password_hash, :status])
-    |> validate_required([:name, :email, :phone, :password_hash, :status])
-  end
+  @doc """
+  A user changeset for registering or changing the email.
 
+  It requires the email to change otherwise an error is added.
+
+  ## Options
+
+    * `:validate_unique` - Set to false if you don't want to validate the
+      uniqueness of the email, useful when displaying live validations.
+      Defaults to `true`.
+  """
   def email_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email])
@@ -115,7 +120,7 @@ defmodule RideFast.Drivers.Driver do
   If there is no user or the user doesn't have a password, we call
   `Pbkdf2.no_user_verify/0` to avoid timing attacks.
   """
-  def valid_password?(%RideFast.Drivers.Driver{password_hash: password_hash}, password)
+  def valid_password?(%RideFast.Accounts.User{password_hash: password_hash}, password)
       when is_binary(password_hash) and byte_size(password) > 0 do
     Pbkdf2.verify_pass(password, password_hash)
   end
@@ -123,5 +128,11 @@ defmodule RideFast.Drivers.Driver do
   def valid_password?(_, _) do
     Pbkdf2.no_user_verify()
     false
+  end
+
+  def changeset(driver, attrs) do
+    driver
+    |> cast(attrs, [:name, :email, :phone, :password_hash])
+    |> validate_required([:name, :email, :phone, :password_hash])
   end
 end
