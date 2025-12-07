@@ -24,6 +24,13 @@ defmodule RideFastWeb.Router do
     end
 
     resources "/vehicles", VehiclesController, except: [:index, :create]
+    resources "/rides", RidesController do
+      post "/accept", RidesController, :accept
+      post "/start", RidesController, :start
+      post "/complete", RidesController, :complete
+      get "/history", RidesController, :index_histories
+      post "/cancel", RidesController, :delete
+    end
 
     # Languages
     resources "/languages", LanguageController

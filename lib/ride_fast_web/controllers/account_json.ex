@@ -10,6 +10,10 @@ defmodule RideFastWeb.AccountJSON do
     }
   end
 
+  def show(%{account: nil}) do
+    nil
+  end
+
   def show(%{account: attrs}) do
     %{
       id: attrs.id,
