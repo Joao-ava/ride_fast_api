@@ -19,7 +19,7 @@ defmodule RideFastWeb.Router do
     pipe_through [:api, :fetch_current_scope_for_api_user]
 
     # Drivers
-    resources "/drivers", DriverController do
+    resources "/drivers", DriverController, except: [:create]  do
       resources "/vehicles", VehiclesController, only: [:index, :create]
       get "/ratings", RatingsController, :index
       post "/profile", DriverProfileController, :create
@@ -38,10 +38,7 @@ defmodule RideFastWeb.Router do
       post "/ratings", RatingsController, :create
     end
 
-    # Languages
-    resources "/languages", LanguageController
-
-    get "/users/:id", UserController, :show
+    resources "/users", UserController, excepts: [:index]
 
     # # Drivers <-> Languages (N:N)
     # get    "/drivers/:driver_id/languages", DriverLanguageController, :index
@@ -54,6 +51,9 @@ defmodule RideFastWeb.Router do
     pipe_through [:api, :fetch_current_scope_for_api_user, :required_admin]
 
     get "/users", UserController, :index
+
+    # Languages
+    resources "/languages", LanguageController
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

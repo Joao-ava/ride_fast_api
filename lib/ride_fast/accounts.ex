@@ -292,4 +292,21 @@ defmodule RideFast.Accounts do
   def list_users(filters \\ %{}) do
     Repo.all(User.list_filter(filters))
   end
+
+  def update_user(%User{} = user, attrs) do
+    with {:ok, user = %User{}} <-
+      user
+      |> User.password_changeset(attrs)
+      |> User.changeset(attrs)
+      |> Repo.update() do
+      {:ok, user}
+    end
+  end
+
+  def delete_user(%User{} = user) do
+    with {:ok, user = %User{}} <-
+           Repo.delete(user) do
+      {:ok, user}
+    end
+  end
 end
