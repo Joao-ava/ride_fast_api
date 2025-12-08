@@ -121,7 +121,7 @@ defmodule RideFast.Vehicle do
 
   """
   def delete_vehicles(%Scope{} = scope, %Vehicles{} = vehicles) do
-    true = vehicles.driver_id == scope.account.id || scope.account.type == :admin
+    true = vehicles.driver_id == scope.account.id || scope.role == :admin
 
     with {:ok, vehicles = %Vehicles{}} <-
            Repo.update(Vehicles.delete_changeset(vehicles)) do
