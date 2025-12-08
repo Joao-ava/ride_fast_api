@@ -3,6 +3,7 @@ defmodule RideFastWeb.DriverController do
 
   alias RideFast.Drivers
   alias RideFast.Drivers.Driver
+  alias RideFast.Accounts
 
   action_fallback RideFastWeb.FallbackController
 
@@ -11,8 +12,8 @@ defmodule RideFastWeb.DriverController do
     render(conn, :index, drivers: drivers)
   end
 
-  def create(conn, %{"driver" => driver_params}) do
-    with {:ok, %Driver{} = driver} <- Drivers.create_driver(driver_params) do
+  def create(conn, driver_params) do
+    with {:ok, %Driver{} = driver} <- Accounts.register_driver(driver_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/drivers/#{driver}")

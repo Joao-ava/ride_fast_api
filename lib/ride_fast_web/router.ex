@@ -14,6 +14,19 @@ defmodule RideFastWeb.Router do
     post "/auth/login", AccountController, :login
   end
 
+
+
+  # rotas admin
+  scope "/api", RideFastWeb do
+    pipe_through [:api, :fetch_current_scope_for_api_user, :required_admin]
+
+    get "/users", UserController, :index
+    post "/drivers", DriverController, :create
+
+    # Languages
+    resources "/languages", LanguageController
+  end
+
   # rotas com autenticação
   scope "/api", RideFastWeb do
     pipe_through [:api, :fetch_current_scope_for_api_user]
@@ -39,21 +52,6 @@ defmodule RideFastWeb.Router do
     end
 
     resources "/users", UserController, excepts: [:index]
-
-    # # Drivers <-> Languages (N:N)
-    # get    "/drivers/:driver_id/languages", DriverLanguageController, :index
-    # post   "/drivers/:driver_id/languages/:language_id", DriverLanguageController, :add
-    # delete "/drivers/:driver_id/languages/:language_id", DriverLanguageController, :remove
-  end
-
-  # rotas admin
-  scope "/api", RideFastWeb do
-    pipe_through [:api, :fetch_current_scope_for_api_user, :required_admin]
-
-    get "/users", UserController, :index
-
-    # Languages
-    resources "/languages", LanguageController
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

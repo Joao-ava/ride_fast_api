@@ -103,7 +103,7 @@ defmodule RideFast.Accounts do
     end
   end
 
-  defp register_driver(attrs) do
+  def register_driver(attrs) do
     opts = Map.put(attrs, "status", "active")
     %Driver{}
     |> Driver.email_changeset(opts)
