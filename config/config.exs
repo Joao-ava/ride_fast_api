@@ -56,6 +56,8 @@ config :ride_fast, RideFast.Guardian,
   issuer: "ride_fast",
   secret_key: "DopjBb3J8oDwOHzOjO9k682ip_auA3BCm88gerFojTbxEJ-dfvGSe_4wEGF0DIwI"
 
+config :bcrypt_elixir, :log_rounds, 4
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

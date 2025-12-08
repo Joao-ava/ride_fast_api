@@ -1,7 +1,7 @@
 import Config
 
 # Only in tests, remove the complexity from the password hashing algorithm
-config :pbkdf2_elixir, :rounds, 1
+config :bcrypt_elixir, :log_rounds, 1
 
 # Configure your database
 #

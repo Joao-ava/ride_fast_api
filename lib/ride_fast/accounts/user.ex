@@ -100,7 +100,7 @@ defmodule RideFast.Accounts.User do
       changeset
       # Hashing could be done with `Ecto.Changeset.prepare_changes/2`, but that
       # would keep the database transaction open longer and hurt performance.
-      |> put_change(:password_hash, Pbkdf2.hash_pwd_salt(password))
+      |> put_change(:password_hash, Bcrypt.hash_pwd_salt(password))
       |> delete_change(:password)
     else
       changeset
@@ -119,15 +119,15 @@ defmodule RideFast.Accounts.User do
   Verifies the password.
 
   If there is no user or the user doesn't have a password, we call
-  `Pbkdf2.no_user_verify/0` to avoid timing attacks.
+  `Bcrypt.no_user_verify/0` to avoid timing attacks.
   """
   def valid_password?(%RideFast.Accounts.User{password_hash: password_hash}, password)
       when is_binary(password_hash) and byte_size(password) > 0 do
-    Pbkdf2.verify_pass(password, password_hash)
+    Bcrypt.verify_pass(password, password_hash)
   end
 
   def valid_password?(_, _) do
-    Pbkdf2.no_user_verify()
+    Bcrypt.no_user_verify()
     false
   end
 

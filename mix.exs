@@ -52,9 +52,9 @@ defmodule RideFast.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:phoenix_html, "~> 4.1"},
-      {:pbkdf2_elixir, "~> 2.0"},
       {:bandit, "~> 1.5"},
-      {:guardian, "~> 2.3"}
+      {:guardian, "~> 2.3"},
+      {:bcrypt_elixir, "~> 3.0"}
     ]
   end
 
