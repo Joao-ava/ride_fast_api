@@ -119,7 +119,7 @@ defmodule RideFast.DriversProfiler do
       %Ecto.Changeset{data: %DriverProfile{}}
 
   """
-  def change_driver_profile(%Scope{} = scope, %DriverProfile{} = driver_Profile, attrs \\ %{}) do
+  def change_driver_profile(%Scope{} = _scope, %DriverProfile{} = driver_Profile, attrs \\ %{}) do
     DriverProfile.changeset(driver_Profile, attrs)
   end
 end

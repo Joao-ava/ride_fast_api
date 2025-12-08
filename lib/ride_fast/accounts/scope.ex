@@ -16,7 +16,7 @@ defmodule RideFast.Accounts.Scope do
   growing application requirements.
   """
 
-  alias RideFast.Accounts.User
+  alias RideFast.Accounts.{User, Admin}
   alias RideFast.Drivers.Driver
 
   defstruct account: nil, role: nil
@@ -32,6 +32,10 @@ defmodule RideFast.Accounts.Scope do
 
   def for_user(%Driver{} = user) do
     %__MODULE__{account: user, role: :driver}
+  end
+
+  def for_user(%Admin{} = admin) do
+    %__MODULE__{account: admin, role: :admin}
   end
 
   def for_user(nil), do: nil

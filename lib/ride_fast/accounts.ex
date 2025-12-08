@@ -6,7 +6,7 @@ defmodule RideFast.Accounts do
   import Ecto.Query, warn: false
   alias RideFast.Repo
 
-  alias RideFast.Accounts.{User, UserToken}
+  alias RideFast.Accounts.{User, UserToken, Admin}
   alias RideFast.Drivers.Driver
 
   ## Database getters
@@ -51,12 +51,21 @@ defmodule RideFast.Accounts do
     if Driver.valid_password?(driver, password), do: driver
   end
 
+  @spec get_admin_by_email_and_password(binary(), binary()) :: any()
+  def get_admin_by_email_and_password(email, password)
+      when is_binary(email) and is_binary(password) do
+    admin = Repo.get_by(Admin, email: email)
+    if Admin.valid_password?(admin, password), do: admin
+  end
+
   def get_by_email_and_password(email, password) do
     user = get_user_by_email_and_password(email, password)
     driver = get_driver_by_email_and_password(email, password)
+    admin = get_admin_by_email_and_password(email, password)
     cond do
       user -> {:ok, user, create_user_api_token("user", user)}
       driver -> {:ok, driver, create_user_api_token("driver", driver)}
+      admin -> {:ok, admin, create_user_api_token("admin", admin)}
       true -> {:error, "E-mail or password is incorrect"}
     end
   end
@@ -81,6 +90,7 @@ defmodule RideFast.Accounts do
     case role do
       "user" -> Repo.get!(User, id)
       "driver" -> Repo.get!(Driver, id)
+      "admin" -> Repo.get!(Admin, id)
       _ -> {:error, :not_found}
     end
   end
@@ -270,7 +280,6 @@ defmodule RideFast.Accounts do
   Fetches the user by API token.
   """
   def fetch_user_by_api_token(token) do
-    IO.puts("token = #{token}")
     with %UserToken{} = user_token <- Repo.get_by(UserToken, token: token),
       {:ok, role, id} = UserToken.get_data(user_token) do
         {:ok, get_account(role, id)}
@@ -278,5 +287,9 @@ defmodule RideFast.Accounts do
       nil -> {:error, :invalid_token}   # quando Repo.get_by não encontra nada
       {:error, reason} -> {:error, reason}
     end
+  end
+
+  def list_users(filters \\ %{}) do
+    Repo.all(User.list_filter(filters))
   end
 end

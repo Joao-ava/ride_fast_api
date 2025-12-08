@@ -15,7 +15,6 @@ defmodule RideFastWeb.DriverLanguageController do
     with {:ok, %DriverLanguage{} = driver_language} <- DriverLanguages.create_driver_language(conn.assigns.current_scope, driver_language_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/driver_languages/#{driver_language}")
       |> render(:show, driver_language: driver_language)
     end
   end

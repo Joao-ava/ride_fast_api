@@ -1,31 +1,16 @@
-defmodule RideFast.Accounts.User do
+defmodule RideFast.Accounts.Admin do
   use Ecto.Schema
-  import Ecto.Query
   import Ecto.Changeset
 
-  schema "users" do
-    field :name, :string
+  schema "admins" do
     field :email, :string
-    field :phone, :string
     field :password, :string, virtual: true, redact: true
-    field :password_hash, :string, redact: true
-    field :confirmed_at, :utc_datetime
-    field :authenticated_at, :utc_datetime, virtual: true
+    field :password_hash, :string
+    field :phone, :string
 
     timestamps(type: :utc_datetime)
   end
 
-  @doc """
-  A user changeset for registering or changing the email.
-
-  It requires the email to change otherwise an error is added.
-
-  ## Options
-
-    * `:validate_unique` - Set to false if you don't want to validate the
-      uniqueness of the email, useful when displaying live validations.
-      Defaults to `true`.
-  """
   def email_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email])
@@ -121,9 +106,10 @@ defmodule RideFast.Accounts.User do
   If there is no user or the user doesn't have a password, we call
   `Pbkdf2.no_user_verify/0` to avoid timing attacks.
   """
-  def valid_password?(%RideFast.Accounts.User{password_hash: password_hash}, password)
+  def valid_password?(%RideFast.Accounts.Admin{password_hash: password_hash}, password)
       when is_binary(password_hash) and byte_size(password) > 0 do
-    Pbkdf2.verify_pass(password, password_hash)
+    result = Pbkdf2.verify_pass(password, password_hash)
+    result
   end
 
   def valid_password?(_, _) do
@@ -133,19 +119,7 @@ defmodule RideFast.Accounts.User do
 
   def changeset(driver, attrs) do
     driver
-    |> cast(attrs, [:name, :email, :phone, :password_hash])
-    |> validate_required([:name, :email, :phone, :password_hash])
-  end
-
-  def list_filter(filters \\ %{}) do
-    query = from r in RideFast.Accounts.User
-
-    # paginação simples
-    page = Map.get(filters, "page", "1") |> String.to_integer()
-    size = Map.get(filters, "size", "10") |> String.to_integer()
-
-    query
-    |> limit(^size)
-    |> offset(^((page - 1) * size))
+    |> cast(attrs, [:email, :phone])
+    |> validate_required([:email, :phone])
   end
 end

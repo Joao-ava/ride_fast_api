@@ -147,4 +147,13 @@ defmodule RideFastWeb.UserAuth do
         |> halt()
     end
   end
+
+  def required_admin(conn, _opts) do
+    case conn.assigns.current_scope.role do
+      :admin -> conn
+      _ -> conn
+        |> send_resp(:unauthorized, "No access for you")
+        |> halt()
+    end
+  end
 end
